@@ -48,15 +48,15 @@ Estimate of time needed to complete: 30 min
 
 Start time: 3:51
 
-Finish time: 5:35
+Finish time: 5:48
 
-Actual time needed to complete: 1 hour
+Actual time needed to complete: 2 hour
 
-Number and name of feature: Feature 6
+Number and name of feature: Feature 3 parks API
 
-Estimate of time needed to complete: 1.5 hour
+Estimate of time needed to complete: 1 hour
 
-Start time: 4:35
+Start time: 5:50
 
 Finish time: 5:35
 
