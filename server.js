@@ -124,8 +124,8 @@ function parksHandler(req, res) {
 // http://localhost:3030/yelp?search_query=amman&formatted_query=Amman%2C%2011181%2C%20Jordan&latitude=31.95156940000000&longitude=35.92396250000000&page=1
 // https://api.yelp.com/v3/businesses/search?term=delis&latitude=37.786882&longitude=-122.399972
 function yelpHandler(req, res) {
-    let city = req.query.search_query;
-    let page = req.query.page;
+    let city = req.query.search_query; // required from network so when we check localhost  http://localhost:3030/yelp?search_query= city in usa like seattle
+    let page = req.query.page; // required from network http://localhost:3030/yelp?search_query=seattle&page=2 also the same path when we check in heroku
     const key= process.env.YELP_API_KEY;
     const numPerPage=5;
     const start = ((page-1)*numPerPage);
@@ -135,7 +135,7 @@ function yelpHandler(req, res) {
         .then(yelpData=>{
             console.log(yelpData.body);
             let yData = yelpData.body;
-            let data1 =yData.businesses.map(val => new Yelp (val));
+            let data1 =yData.businesses.map(val => new Yelp (val)); // when we console.log we get data from array called business
             res.send(data1);
         }).catch(error=>{
             console.log(error);
@@ -195,7 +195,7 @@ function Movies (results) {
     this.overview = results.overview;
     this.average_votes=results.vote_average;
     this.total_votes= results.vote_count;
-    this.image_url= `https://image.tmdb.org/t/p/w500/${results.poster_path}`;
+    this.image_url= `https://image.tmdb.org/t/p/w500/${results.poster_path}`; //from trello the first part of path is common for all images but its not exist in documentation
     this.popularity=results.popularity;
     this.released_on=results.release_date;
 }
