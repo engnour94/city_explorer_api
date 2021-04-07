@@ -85,22 +85,22 @@ Actual time needed to complete: 6.5 hours
 
 *** 
 ## lab9
-Number and name of feature: Feature 1 Database
+Number and name of feature: Feature 1 movies
 
 Estimate of time needed to complete: 30 min
 
-Start time: 4:11
+Start time: 2:30
 
-Finish time: 5:25
+Finish time: 3:40
 
-Actual time needed to complete: 1.25 hour
+Actual time needed to complete: 1:10 hour
 ***
-Number and name of feature: Feature 2 server
+Number and name of feature: Feature 2 yelp and paginating 
 
 Estimate of time needed to complete: 3 hours 
 
-Start time: 6:00 pm
+Start time: 4:00
 
-Finish time: 12:30 am
+Finish time: 7:00
 
-Actual time needed to complete: 6.5 hours
+Actual time needed to complete: 3 hours
