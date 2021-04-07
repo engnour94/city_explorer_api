@@ -82,3 +82,25 @@ Start time: 6:00 pm
 Finish time: 12:30 am
 
 Actual time needed to complete: 6.5 hours
+
+*** 
+## lab9
+Number and name of feature: Feature 1 Database
+
+Estimate of time needed to complete: 30 min
+
+Start time: 4:11
+
+Finish time: 5:25
+
+Actual time needed to complete: 1.25 hour
+***
+Number and name of feature: Feature 2 server
+
+Estimate of time needed to complete: 3 hours 
+
+Start time: 6:00 pm
+
+Finish time: 12:30 am
+
+Actual time needed to complete: 6.5 hours
