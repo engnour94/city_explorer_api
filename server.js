@@ -2,6 +2,8 @@
 //DOTENV (read our environment variable)
 require('dotenv').config();
 
+
+const pg = require('pg');
 // Application Dependencies
 const express = require('express');
 
@@ -14,8 +16,16 @@ const superagent = require('superagent');
 // Application Setup
 
 const server = express();
-const PORT = process.env.PORT || 5000;
 server.use(cors());
+const PORT = process.env.PORT || 5000;
+
+// const client = new pg.Client(process.env.DATABASE_URL);
+const client = new pg.Client({ connectionString: process.env.DATABASE_URL,
+    ssl:{rejectUnauthorized: false
+    }
+
+});
+
 
 // Routes
 server.get('/', homeRouteHandler);
@@ -32,29 +42,30 @@ server.get('*', notFoundHandler);
 function homeRouteHandler(req, res) {
     res.send('your server is working');
 }
-//http://localhost:3000/location?city=amman
-function locationHandler(req, res) {
-    console.log(req.query);
-    let cityName = req.query.city;
-    let key = process.env.GEOCODE_API_KEY;
-    let locURL = `https://eu1.locationiq.com/v1/search.php?key=${key}&q=${cityName}&format=json`;
-
-    superagent.get(locURL)
-        .then(geoData => {
-            let gData= geoData.body;
-            const locationData = new Location(cityName,gData);
-            res.send(locationData);
-        })
-        .catch(error => {
-            console.log('inside superagent');
-            console.log('Error in getting data from LocationIQ server');
-            console.error(error);
-            res.send(error);
-        });
-
+//http://localhost:3030/location?city=amman
+function locationHandler( request, response ) {
+    let city = request.query.city;
+    let SQL = 'SELECT * FROM locations WHERE search_query = $1';
+    let safeValues = [city];
+    client.query( SQL, safeValues )
+        .then ( results =>{
+            if( results.rows.length > 0 ){
+                response.send( results.rows[0] );
+                console.log( results.rows );
+            }else{
+                let key = process.env.GEOCODE_API_KEY;
+                let locURL = `https://eu1.locationiq.com/v1/search.php?key=${key}&q=${city}&format=json`;
+                superagent.get( locURL )
+                    .then( geoData => {
+                        let apiData = geoData.body;
+                        // console.log( apiData );
+                        let locationData = new Location( city, apiData );
+                        response.send( locationData );
+                        // console.log( apiData );
+                    } );
+            }
+        } );
 }
-
-
 
 function weatherHandler(req, res) {
     let cityName = req.query.search_query;
@@ -106,6 +117,14 @@ function Location(cityName,locData) {
     this.formatted_query = locData[0].display_name;
     this.latitude = locData[0].lat;
     this.longitude = locData[0].lon;
+    {
+        let SQL = 'INSERT INTO locations (search_query,formatted_query,latitude,longitude) VALUES ($1,$2,$3,$4) RETURNING *;';
+        let safeValues = [this.search_query,this.formatted_query,this.latitude,this.longitude];
+        client.query( SQL, safeValues )
+            .then( results=>{
+                return( results.rows );
+            } );
+    }
 }
 
 
@@ -123,6 +142,9 @@ function Park(data){
 }
 
 
-server.listen(PORT, () => {
-    console.log(`Listening on PORT ${PORT}`);
-});
+client.connect()
+    .then(() => {
+        server.listen(PORT, () =>
+            console.log(`listening on ${PORT}`)
+        );
+    });
